@@ -1,0 +1,112 @@
+@import '_mixin';
+
+:root {
+	--font-family-serif: serif;
+	--font-family-sans-serif: sans-serif;
+
+	/* COLORS */
+	--color-theme-white: #fff;
+	--color-theme-black: #000;
+
+	--color-theme-primary: #2a2d2e;
+	--color-theme-accent: #406aa6;
+	--color-theme-alert: #d80606;
+
+	--color-theme-01: #ccdaeb;
+	--color-theme-02: #254473;
+	--color-theme-03: #1c2b3f;
+	--color-theme-04: #c8cfd8;
+	--color-theme-05: #5b6773;
+	--color-theme-06: #c8cfd8;
+
+	/* BACKGROUND COLORS */
+	--color-theme-background-header: var(--color-theme-accent);
+	--color-theme-background-main: var(--color-theme-white);
+	--color-theme-background-body: var(--color-theme-white);
+
+	/** TEXT COLORS */
+	--color-theme-text: #000;
+
+	/* LINKS COLORS */
+	--color-theme-link: var(--color-theme-accent);
+	--color-theme-link-visited: var(--color-theme-accent);
+	--color-theme-link-hover: var(--color-theme-primary);
+	--color-theme-link-active: var(--color-theme-primary);
+
+	/* BRANDS COLORS */
+	--color-theme-facebook: #4267b2;
+	--color-theme-instagram: #405de6;
+	--color-theme-linkedin: #0a66c2;
+	--color-theme-twitter: #1da1f2;
+
+	/** BUTTONS */
+	--button-background: var(--color-theme-accent);
+	--button-background-hover: var(--color-theme-02);
+	--button-border-color: var(--color-theme-accent);
+	--button-border-color-theme-hover: var(--color-theme-02);
+	--button-color: var(--color-theme-white);
+	--button-color-theme-hover: var(--color-theme-white);
+	--button-reverse-background-hover: var(--color-theme-01);
+
+	/** MARGIN & PADDING */
+	--padding-base: 16px;
+
+	--spacer-80: calc(5 * var(--padding-base));
+	--spacer-40: calc(2.5 * var(--padding-base));
+	--spacer-32: calc(2 * var(--padding-base));
+	--spacer-28: calc(1.75 * var(--padding-base));
+	--spacer-24: calc(1.5 * var(--padding-base));
+	--spacer-20: calc(1.25 * var(--padding-base));
+	--spacer-16: calc(1 * var(--padding-base));
+	--spacer-10: calc(0.625 * var(--padding-base));
+	--spacer-8: calc(0.5 * var(--padding-base));
+	--spacer-4: calc(0.25 * var(--padding-base));
+
+	/** radius **/
+	--radius-default: 4px;
+
+	/** blur **/
+	--blur-default: 10px;
+
+	/** font-size **/
+	--font-base: 16px;
+
+	@media screen and (max-width: #{ $width_xl -1px }) {
+		--font-base: 14px;
+	}
+
+	--font-size-regular: var(--font-base);
+
+	--font-size-72: 4.5em;
+	--font-size-64: 4em;
+	--font-size-40: 2.5em;
+	--font-size-32: 2em;
+	--font-size-28: 1.75em;
+	--font-size-24: 1.5em;
+	--font-size-20: 1.25em;
+	--font-size-16: 1em;
+	--font-size-14: 0.875em;
+	--font-size-12: 0.75em;
+
+	@media screen and (max-width: #{ $width_md -1px }) {
+		--font-size-40: 2em;
+		--font-size-32: 1.5em;
+		--font-size-28: 1.5em;
+		--font-size-24: 1.25em;
+		--font-size-20: 1.15em;
+		--font-size-16: 1em;
+		--font-size-14: 0.875em;
+		--font-size-12: 0.75em;
+	}
+
+	/** font-weight **/
+	--font-weight-black: 900;
+	--font-weight-extra-bold: 800;
+	--font-weight-bold: 700;
+	--font-weight-semi-bold: 600;
+	--font-weight-medium: 500;
+	--font-weight-regular: 400;
+	--font-weight-light: 300;
+	--font-weight-extra-light: 200;
+	--font-weight-thin: 100;
+}

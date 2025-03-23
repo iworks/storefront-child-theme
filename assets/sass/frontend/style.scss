@@ -1,0 +1,28 @@
+/*
+Theme Name:  THEME_NAME
+Theme URI:   THEME_URI
+Author:      sellspark.io
+Author URI:  http://sellspark.iop
+Template:    storefront
+Description: This is a blank child theme for WooThemes StoreFront theme
+Version:     THEME_VERSION.BUILDTIMESTAMP
+License:     GNU General Public License v3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
+Text Domain: THEME_NAME
+*/
+
+@import '_mixin';
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: var(--color-theme-background-body);
+	color: var(--color-theme-text);
+}
+
+
+@import 'elements/site.scss';
+@import 'elements/pages.scss';
+@import 'elements/commons.scss';

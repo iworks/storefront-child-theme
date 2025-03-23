@@ -1,0 +1,17 @@
+assets/css
+assets/css/
+assets/scripts/frontend/
+assets/scripts/frontend.js
+assets/scripts/frontend.min.js
+dist/
+.DS_Store
+*.log
+*.map
+node_modules/
+package-lock.json
+release
+release/
+.sass-cache
+.sass-cache/
+style.css
+Thumbs.db

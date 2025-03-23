@@ -1,0 +1,70 @@
+@import '_mixin.scss';
+
+@media screen {
+	.printonly {
+		display: none;
+	}
+}
+
+@media print {
+	.printonly {
+		display: initial;
+	}
+
+	body {
+		padding: 0 1em;
+
+		a {
+			color: var(--color-theme-black) !important;
+		}
+
+		#colophon,
+		.navigation,
+		.site-header,
+		#opi-jobs-cookie-notice {
+			display: none;
+		}
+
+		.page-header {
+			.page-title {
+				color: var(--color-theme-black);
+			}
+		}
+
+		.site-main {
+			h1 {
+				font-size: 1.6em;
+			}
+
+			h2 {
+				font-size: 1.5em;
+			}
+
+			h3 {
+				font-size: 1.4em;
+			}
+
+			h4 {
+				font-size: 1.3em;
+			}
+
+			h5 {
+				font-size: 1.2em;
+			}
+
+			h6 {
+				font-size: 1.1em;
+			}
+
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6,
+			{
+			color: var(--color-theme-black);
+		}
+	}
+}
+}

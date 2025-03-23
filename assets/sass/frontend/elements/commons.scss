@@ -1,0 +1,53 @@
+html {
+	min: {
+		width: $width_xs;
+	}
+
+	.otgs-development-site-front-end {
+		display: none;
+	}
+}
+
+body {
+	min: {
+		width: $width_xs;
+	}
+}
+
+a {
+	&[rel=external] {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+
+		&:after {
+			display: block;
+			width: 12px;
+			height: 12px;
+			content: "";
+			@include iconb('external.svg');
+		}
+	}
+}
+
+/**
+ * accessibility
+ */
+
+.sr-only {
+	@include reset_min;
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+}
+
+/**
+ * WPML Developent Site Banner
+ */
+.otgs-development-site-front-end {
+	display: none !important;
+}
