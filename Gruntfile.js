@@ -77,8 +77,8 @@ module.exports = function(grunt) {
 
 		// SASS files to process. Resulting CSS files will be minified as well.
 		css_files_compile: {
-			"assets/css/frontend/settings.css": "assets/sass/frontend/settings.scss",
-			"assets/css/frontend/style.css": "assets/sass/frontend/style.scss",
+			"assets/styles/frontend/settings.css": "assets/sass/frontend/settings.scss",
+			"assets/styles/frontend/style.css": "assets/sass/frontend/style.scss",
 		},
 
 		// BUILD patterns to exclude code for specific builds.
@@ -299,8 +299,8 @@ module.exports = function(grunt) {
 		concat_css: {
 			options: {},
 			frontend: {
-				src: ['assets/styles/frontend/settings.css', 'assets/styles/frontend/*.css'],
-				dest: 'assets/styles/<%= pkg.name %>-frontend.css'
+				src: ['assets/styles/frontend/style.css', 'assets/styles/frontend/*.css'],
+				dest: 'style.css'
 			},
 			admin: {
 				src: ['assets/styles/admin/*.css'],
@@ -505,7 +505,7 @@ module.exports = function(grunt) {
 		// grunt.task.run('js');
 		grunt.task.run('css');
 		grunt.task.run('makepot');
-		grunt.task.run( 'po2mo');
+		grunt.task.run( 'potomo');
 		grunt.task.run('copy');
 		grunt.task.run('replace');
 		grunt.task.run('compress');
