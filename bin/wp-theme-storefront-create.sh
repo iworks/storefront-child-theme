@@ -10,24 +10,26 @@ THEME_SLUG=$2
 THEME=${PWD}/${THEME_SLUG}
 ASSETS=${PWD}/${THEME_SLUG}/assets
 
+GIT_BRANCH_NAME=main
+
 #
 # SASS
 #
 mkdir -p ${ASSETS}/sass/frontend/
 mv ${THEME}/sass ${ASSETS}/sass/frontend/_s
 #
-# https://github.com/iworks/storefront-child-theme/archive/refs/heads/master.zip
+# https://github.com/iworks/storefront-child-theme/archive/refs/heads/${GIT_BRANCH_NAME}.zip
 #
-wget https://github.com/iworks/storefront-child-theme/archive/refs/heads/master.zip
+wget https://github.com/iworks/storefront-child-theme/archive/refs/heads/${GIT_BRANCH_NAME}.zip
 
-unzip -o master.zip
-cp -r storefront-child-theme-master/* ${THEME}
-cp -r storefront-child-theme-master/.gitignore ${THEME}
+unzip -o ${GIT_BRANCH_NAME}.zip
+cp -r storefront-child-theme-${GIT_BRANCH_NAME}/* ${THEME}
+cp -r storefront-child-theme-${GIT_BRANCH_NAME}/.gitignore ${THEME}
 #
 # clean up
 #
-rm -rf master.zip
-rm -rf storefront-child-theme-master
+rm -rf ${GIT_BRANCH_NAME}.zip
+rm -rf storefront-child-theme-${GIT_BRANCH_NAME}
 rm -rf ${THEME_SLUG}.zip
 mv ${THEME_SLUG}/bin/.eslintrc ${THEME_SLUG}/
 rm -rf ${THEME_SLUG}/bin

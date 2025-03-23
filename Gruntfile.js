@@ -12,9 +12,6 @@
 
 module.exports = function(grunt) {
 
-	// Show elapsed time at the end.
-	require('time-grunt')(grunt);
-
 	// Load all grunt tasks.
 	require('load-grunt-tasks')(grunt);
 
@@ -22,9 +19,58 @@ module.exports = function(grunt) {
 	var buildyear = 1900 + new Date().getYear();
 	var buildtimestamp = new Date().getTime();
 
-	var conf = {
-		buildtime: buildtime,
+	/**
+	 * excludes
+	 */
+	var excludeCopyFiles = [
+		'**',
+		'!**/bitbucket-pipelines.yml',
+		'!contributing.md',
+		'!**/css/less/**',
+		'!**/css/sass/**',
+		'!**/css/src/**',
+		'!.editorconfig',
+		'!.git*',
+		'!.git/**',
+		'!**/Gruntfile.js',
+		'!**/img/src/**',
+		'!**/js/src/**',
+		'!**/LICENSE',
+		'!LICENSE',
+		'!**/*.map',
+		'!node_modules/**',
+		'!**/package.json',
+		'!package-lock.json',
+		'!postcss.config.js',
+		'!**/README.md',
+		'!README.md',
+		'!release/**',
+		'!.sass-cache/**',
+		'!**/tests/**',
+		'!webpack.config.js',
+	];
 
+	var excludeCopyFilesGIT = excludeCopyFiles.slice(0).concat(
+		[
+			'!includes/pro/**',
+			'!readme.txt',
+		]
+	);
+
+	var excludeCopyFilesWPorg = excludeCopyFiles.slice(0).concat(
+		[
+			'!assets/sass/**',
+			'!assets/scripts/src/**',
+			'!assets/scss/**',
+			'!assets/styles/frontend/**',
+			'!includes/iworks/wordpress-plugin-stub/class-iworks-wordpress-plugin-stub-github.php',
+			'!includes/pro/**',
+			'!languages/*.mo',
+			'!languages/*.po',
+		]
+	);
+
+	var conf = {
 		// Concatenate those JS files into a single file (target: [source, source, ...]).
 		js_files_concat: {
 		},
@@ -130,17 +176,19 @@ module.exports = function(grunt) {
 		// Regex patterns to exclude from transation.
 		translation: {
 			ignore_files: [
-				"node_modules/.*",
-				"(^.php)", // Ignore non-php files.
-				"inc/external/.*", // External libraries.
-				"release/.*", // Temp release files.
-				"tests/.*", // Unit testing.
+				'README.md',
+				'.git*',
+				'includes/external/.*', // External libraries.
+				'node_modules/.*',
+				'(^.php)', // Ignore non-php files.
+				'release/.*', // Temp release files.
+				'.sass-cache/.*',
+				'tests/.*', // Unit testing.
+				'.editorconfig', // editor configuration
 			],
-			pot_dir: "languages/", // With trailing slash.
-			textdomain: "<%= pkg.name %>",
+			pot_dir: 'languages/', // With trailing slash.
+			textdomain: '<%= pkg.name %>',
 		},
-
-		dir: "<%= pkg.name %>/",
 	};
 
 	// Project configuration
@@ -151,10 +199,10 @@ module.exports = function(grunt) {
 		concat: {
 			options: {
 				stripBanners: true,
-				banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +
+				banner: '/*! <%= pkg.title %> - <%= pkg.version %>\n' +
 				' * <%= pkg.homepage %>\n' +
 				' * Copyright (c) <%= grunt.template.today("yyyy") %>;\n' +
-				' * Licensed GPLv2+\n' +
+				' * Licensed <%= pkg.license %>' +
 				' */\n'
 			},
 			scripts: {
@@ -220,7 +268,7 @@ module.exports = function(grunt) {
 		sass: {
 			all: {
 				options: {
-					'sourcemap=auto': true, // 'sourcemap': 'none' does not work...
+					'sourcemap=none': true, // 'sourcemap': 'none' does not work...
 					unixNewlines: true,
 					style: 'expanded'
 				},
@@ -249,32 +297,26 @@ module.exports = function(grunt) {
 		},
 
 		concat_css: {
-			options: {
-
-				// Task-specific options go here.
+			options: {},
+			frontend: {
+				src: ['assets/styles/frontend/settings.css', 'assets/styles/frontend/*.css'],
+				dest: 'assets/styles/<%= pkg.name %>-frontend.css'
 			},
-			all: {
-				src: ['assets/css/frontend/layout.css', 'assets/css/frontend/*.css'],
-				dest: 'assets/css/style.css'
-			}
-		},
-
-		// CSS - Required for CSS-autoprefixer and maybe some SCSS function.
-		compass: {
-			options: {
-				sourcemap: false
-			},
-			server: {
-				options: {
-					debugInfo: true
-				}
+			admin: {
+				src: ['assets/styles/admin/*.css'],
+				dest: 'assets/styles/<%= pkg.name %>-admin.css'
 			}
 		},
 
 		// CSS - Minify all .css files.
 		cssmin: {
 			options: {
-				format: 'beautify'
+				banner: '/*! <%= pkg.title %> - <%= pkg.version %>\n' +
+				' * <%= pkg.homepage %>\n' +
+				' * Copyright (c) <%= grunt.template.today("yyyy") %>;\n' +
+				' * Licensed <%= pkg.license %>' +
+				' */\n',
+				mergeIntoShorthands: false
 			},
 			minify: {
 				expand: true,
@@ -290,7 +332,7 @@ module.exports = function(grunt) {
 		watch: {
 			sass: {
 				files: ['assets/sass/**/*.scss'],
-				tasks: ['css'],
+				tasks: ['sass', 'concat_css', 'cssmin'],
 				options: {
 					debounceDelay: 500
 				}
@@ -327,31 +369,39 @@ module.exports = function(grunt) {
 		makepot: {
 			target: {
 				options: {
-					cwd: '',
 					domainPath: conf.translation.pot_dir,
 					exclude: conf.translation.ignore_files,
 					mainFile: 'style.css',
-					potComments: '',
 					potFilename: conf.translation.textdomain + '.pot',
 					potHeaders: {
 						poedit: true, // Includes common Poedit headers.
+						'project-id-version': '<%= pkg.version %>',
+						'language-team': 'iWorks <support@iworks.pl>',
+						'last-translator': '<%= pkg.translator.name %> <<%= pkg.translator.email %>>',
+						'report-msgid-bugs-to': 'http://iworks.pl',
 						'x-poedit-keywordslist': true // Include a list of all possible gettext functions.
 					},
-					processPot: null, // A callback function for manipulating the POT file.
-					type: 'wp-theme', // wp-plugin or wp-theme
-					updateTimestamp: true, // Whether the POT-Creation-Date should be updated without other changes.
-					updatePoFiles: true // Whether to update PO files in the same directory as the POT file.
+					exclude: ['node_modules', '.git', '.sass-cache', 'release'],
+					type: 'wp-theme',
+					updateTimestamp: true,
+					updatePoFiles: true
 				}
 			}
 		},
 
-		po2mo: {
-			files: {
-				src: 'languages/pl_PL.po',
-				dest: 'languages/pl_PL.mo'
-			},
-			options: {
-				checkDomain: true
+		potomo: {
+			dist: {
+				options: {
+					poDel: false
+				},
+				files: [{
+					expand: true,
+					cwd: conf.translation.pot_dir,
+					src: ['*.po'],
+					dest: conf.translation.pot_dir,
+					ext: '.mo',
+					nonull: true
+				}]
 			}
 		},
 
@@ -435,10 +485,19 @@ module.exports = function(grunt) {
 		},
 	});
 
-	// Test task.
-	grunt.registerTask('hello', 'Test if grunt is working', function() {
-		grunt.log.subhead('Hi there :)');
-		grunt.log.writeln('Looks like grunt is installed!');
+
+	grunt.registerTask('notes', 'Show release notes', function() {
+		grunt.log.subhead('Release notes');
+		grunt.log.writeln('  1. Check FORUM for open threads');
+		grunt.log.writeln('  2. REPLY to forum threads + unsubscribe');
+		grunt.log.writeln('  3. Update the TRANSLATION files');
+		grunt.log.writeln('  4. Generate ARCHIVE');
+		grunt.log.writeln('  5. Check ARCHIVE structure - it should be a folder with theme name');
+		grunt.log.writeln('  6. INSTALL on a clean WordPress installation');
+		grunt.log.writeln('  7. RELEASE the theme on WordPress.org!');
+		grunt.log.writeln('  8. Add git tag!');
+		grunt.log.writeln('  9. RELEASE the theme on GitHub!');
+		grunt.log.writeln(' 10. RELEASE the theme!');
 	});
 
 	grunt.registerTask('release', 'Generating release copy', function() {
